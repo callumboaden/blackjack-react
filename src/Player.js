@@ -1,17 +1,20 @@
-import React from 'react'
-import Hand from './Hand';
+import React from "react";
+import Hand from "./Hand";
+import './Player.css';
 
 function Player(props) {
-    const { hands } = props;
-    console.log(hands)
-    return (
-        <div>
-            <h2>Player</h2>
-            { hands.map((hand, i) => (
-                <Hand key {...hand} />
-            ))}
-        </div>
-    )
+  const { hands } = props;
+
+  return (
+    <div className="Player">
+      <h2>Player</h2>
+      <div className="hands-list">
+        {hands.map((hand, i) => (
+          <Hand key={i} {...hand} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Player;

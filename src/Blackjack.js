@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import Player from "./Player.js";
+import Player from "./Player";
+import Dealer from "./Dealer";
 
 class Blackjack extends Component {
   constructor(props) {
@@ -7,9 +8,9 @@ class Blackjack extends Component {
 
     this.state = {
       deck: this.createDeck(),
+      dealerHands: [],
       playerHands: [],
-      playerBank: 1000,
-      dealerHand: {}
+      playerBank: 1000
     };
 
     this.getNextCard = this.getNextCard.bind(this);
@@ -24,8 +25,8 @@ class Blackjack extends Component {
   }
   deal() {
     this.setState({
-      playerHands: [this.generateHand()],
-      dealerHand: this.generateHand()
+      dealerHands: [this.generateHand()],
+      playerHands: [this.generateHand()]
     });
   }
   generateHand() {
@@ -108,10 +109,11 @@ class Blackjack extends Component {
 
   render() {
     
-    const { playerHands } = this.state;
+    const { playerHands, dealerHands } = this.state;
     return (
       <div>
         <h1>Blackjack</h1>
+        <Dealer hands={dealerHands} />
         <Player hands={playerHands} />
       </div>
     );
