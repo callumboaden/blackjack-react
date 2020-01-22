@@ -107,7 +107,7 @@ class Blackjack extends Component {
   }
 
   render() {
-    console.log(this.state);
+    
     const { playerHands } = this.state;
     return (
       <div>
