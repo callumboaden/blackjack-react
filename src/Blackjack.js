@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Player from "./Player";
 import Dealer from "./Dealer";
-import Controls from './Controls';
+import Controls from "./Controls";
 
 class Blackjack extends Component {
   constructor(props) {
@@ -11,7 +11,8 @@ class Blackjack extends Component {
       deck: this.createDeck(),
       dealerHands: [],
       playerHands: [],
-      playerBank: 1000
+      playerBank: 1000,
+      currentHand: 0
     };
 
     this.getNextCard = this.getNextCard.bind(this);
@@ -20,15 +21,27 @@ class Blackjack extends Component {
     this.createDeck = this.createDeck.bind(this);
     this.shuffle = this.shuffle.bind(this);
     this.deal = this.deal.bind(this);
+    this.hit = this.hit.bind(this);
   }
   componentDidMount() {
     this.deal();
   }
+
   deal() {
     this.setState({
       dealerHands: [this.generateHand()],
       playerHands: [this.generateHand()]
     });
+  }
+  hit() {
+    const hand = this.state.playerHands[this.state.currentHand];
+
+    if (hand.weight <= 21) {
+      hand.cards.push(this.getNextCard());
+
+      this.calculateHandWeight(hand);
+      this.setState({ playerHands: [hand] });
+    }
   }
   generateHand() {
     const hand = {
@@ -109,14 +122,13 @@ class Blackjack extends Component {
   }
 
   render() {
-    
     const { playerHands, dealerHands } = this.state;
     return (
       <div>
         <h1>Blackjack</h1>
-        <Dealer hands={dealerHands} />
         <Player hands={playerHands} />
-        <Controls />
+        <Dealer hands={dealerHands} />
+        <Controls hit={this.hit} />
       </div>
     );
   }
