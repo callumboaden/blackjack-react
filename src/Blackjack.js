@@ -15,6 +15,7 @@ class Blackjack extends Component {
       currentHand: 0
     };
 
+    this.dealerTurn = this.dealerTurn.bind(this);
     this.getNextCard = this.getNextCard.bind(this);
     this.generateHand = this.generateHand.bind(this);
     this.calculateHandWeight = this.calculateHandWeight.bind(this);
@@ -26,7 +27,26 @@ class Blackjack extends Component {
   componentDidMount() {
     this.deal();
   }
+  dealerTurn() {
+    const hand = this.state.dealerHands[0];
 
+    // if dealer hand < 16
+    while (hand.weight < 16) {
+      hand.cards.push(this.getNextCard());
+
+      this.calculateHandWeight(hand);
+      this.setState({ dealerHands: [hand] });
+    }
+
+    return;
+
+      // if 
+    
+    // getNextCard until weight >= 16
+    // else end game/round, then check score
+    
+   
+  }
   deal() {
     this.setState({
       dealerHands: [this.generateHand()],
@@ -34,14 +54,26 @@ class Blackjack extends Component {
     });
   }
   hit() {
-    const hand = this.state.playerHands[this.state.currentHand];
+    const hand = this.getCurrentHand();
 
     if (hand.weight <= 21) {
       hand.cards.push(this.getNextCard());
 
       this.calculateHandWeight(hand);
       this.setState({ playerHands: [hand] });
+      
     }
+
+    if (this.getCurrentHand().weight > 21) {
+      this.dealerTurn();
+    }
+
+    // current hand > 21 
+    // TODO: && current hand > hands length
+
+  }
+  getCurrentHand() {
+    return this.state.playerHands[this.state.currentHand];
   }
   generateHand() {
     const hand = {
