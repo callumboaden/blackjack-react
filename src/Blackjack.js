@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Player from "./Player";
 import Dealer from "./Dealer";
 import Controls from "./Controls";
+import Panel from "./Panel";
 
 class Blackjack extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class Blackjack extends Component {
       deck: this.createDeck(),
       dealerHands: [],
       playerHands: [],
-      playerBank: 1000,
+      bank: 1000,
+      initialBet: 0,
       currentHand: 0
     };
 
@@ -23,10 +25,12 @@ class Blackjack extends Component {
     this.shuffle = this.shuffle.bind(this);
     this.deal = this.deal.bind(this);
     this.hit = this.hit.bind(this);
+    this.addBet = this.addBet.bind(this);
   }
   componentDidMount() {
     this.deal();
   }
+
   dealerTurn() {
     const hand = this.state.dealerHands[0];
 
@@ -40,18 +44,20 @@ class Blackjack extends Component {
 
     return;
 
-      // if 
-    
+    // if
+
     // getNextCard until weight >= 16
     // else end game/round, then check score
-    
-   
   }
   deal() {
     this.setState({
       dealerHands: [this.generateHand()],
       playerHands: [this.generateHand()]
     });
+  }
+  addBet(amount) {
+    this.setState({ initialBet: this.state.initialBet + amount});
+    console.log(amount)
   }
   hit() {
     const hand = this.getCurrentHand();
@@ -61,16 +67,14 @@ class Blackjack extends Component {
 
       this.calculateHandWeight(hand);
       this.setState({ playerHands: [hand] });
-      
     }
 
     if (this.getCurrentHand().weight > 21) {
       this.dealerTurn();
     }
 
-    // current hand > 21 
+    // current hand > 21
     // TODO: && current hand > hands length
-
   }
   getCurrentHand() {
     return this.state.playerHands[this.state.currentHand];
@@ -154,13 +158,13 @@ class Blackjack extends Component {
   }
 
   render() {
-    const { playerHands, dealerHands } = this.state;
+    const { playerHands, dealerHands, bank, initialBet } = this.state;
     return (
       <div>
-        <h1>Blackjack</h1>
+        <Panel bank={bank} addBet={this.addBet} bet={initialBet} />
         <Player hands={playerHands} />
         <Dealer hands={dealerHands} />
-        <Controls hit={this.hit} />
+        <Controls hit={this.hit}  />
       </div>
     );
   }

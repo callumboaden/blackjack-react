@@ -1,0 +1,8 @@
+.Panel {
+    width: 80vw;
+    height: 20vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #c3c3c3;
+}
