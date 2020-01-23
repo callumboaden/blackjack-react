@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Player from "./Player";
 import Dealer from "./Dealer";
+import Controls from './Controls';
 
 class Blackjack extends Component {
   constructor(props) {
@@ -115,6 +116,7 @@ class Blackjack extends Component {
         <h1>Blackjack</h1>
         <Dealer hands={dealerHands} />
         <Player hands={playerHands} />
+        <Controls />
       </div>
     );
   }
