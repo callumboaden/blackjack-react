@@ -14,7 +14,8 @@ class Blackjack extends Component {
       playerHands: [],
       bank: 1000,
       initialBet: 0,
-      currentHand: 0
+      currentHand: 0,
+      isPlaying: false
     };
 
     this.dealerTurn = this.dealerTurn.bind(this);
@@ -25,12 +26,13 @@ class Blackjack extends Component {
     this.shuffle = this.shuffle.bind(this);
     this.deal = this.deal.bind(this);
     this.hit = this.hit.bind(this);
+    this.split = this.split.bind(this);
     this.addBet = this.addBet.bind(this);
   }
   componentDidMount() {
+    this.addBet(50);
     this.deal();
   }
-
   dealerTurn() {
     const hand = this.state.dealerHands[0];
 
@@ -49,15 +51,49 @@ class Blackjack extends Component {
     // getNextCard until weight >= 16
     // else end game/round, then check score
   }
+  split() {
+    console.log("splitting hand");
+    const newHand = {};
+    const currentHand = this.getCurrentHand();
+
+    newHand.cards = [
+      currentHand.cards.pop(),
+      this.getNextCard()
+    ];
+
+    currentHand.cards.push(this.getNextCard());
+
+    // calc weight for each hand
+    this.calculateHandWeight(currentHand);
+    this.calculateHandWeight(newHand);
+
+    this.setState({ playerHands: [currentHand, newHand] });
+  }
   deal() {
-    this.setState({
-      dealerHands: [this.generateHand()],
-      playerHands: [this.generateHand()]
-    });
+    if (this.state.initialBet) {
+      // const playerHand = this.generateHand();
+
+      // TESTING
+      const playerHand = {
+        cards: [
+          { suit: "hearts", value: "J", weight: 10, string: "JH" },
+          { suit: "spades", value: "J", weight: 10, string: "JS" }
+        ]
+      };
+
+      this.calculateHandWeight(playerHand);
+
+      playerHand.bet = this.state.initialBet;
+
+      this.setState({
+        dealerHands: [this.generateHand()],
+        playerHands: [playerHand],
+        isPlaying: true
+      });
+    }
   }
   addBet(amount) {
-    this.setState({ initialBet: this.state.initialBet + amount});
-    console.log(amount)
+    this.setState({ initialBet: this.state.initialBet + amount });
   }
   hit() {
     const hand = this.getCurrentHand();
@@ -158,13 +194,30 @@ class Blackjack extends Component {
   }
 
   render() {
-    const { playerHands, dealerHands, bank, initialBet } = this.state;
+    const {
+      playerHands,
+      dealerHands,
+      bank,
+      initialBet,
+      isPlaying
+    } = this.state;
+    console.log(this.state);
     return (
       <div>
-        <Panel bank={bank} addBet={this.addBet} bet={initialBet} />
+        <Panel
+          bank={bank}
+          addBet={this.addBet}
+          bet={initialBet}
+          isPlaying={isPlaying}
+        />
         <Player hands={playerHands} />
         <Dealer hands={dealerHands} />
-        <Controls hit={this.hit}  />
+        <Controls
+          hit={this.hit}
+          deal={this.deal}
+          isPlaying={isPlaying}
+          split={this.split}
+        />
       </div>
     );
   }
