@@ -3,9 +3,11 @@ import Card from "./Card";
 import "./Hand.css";
 
 function Hand(props) {
-  const { cards, weight } = props;
+  const { cards, weight, id, currentHand } = props;
+  const activeHand = currentHand === id ? 'active' : '';
+
   return (
-    <div className="Hand">
+    <div className={`Hand ${activeHand}`}>
       { weight > 21 && <h4>Bust!</h4>}
       <div className="Hand-cards">
         {cards.map(card => (

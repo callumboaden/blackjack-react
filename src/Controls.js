@@ -2,7 +2,7 @@ import React from "react";
 import "./Controls.css";
 
 function Controls(props) {
-  const { deal, hit, split, isPlaying } = props;
+  const { deal, hit, split, stand, isPlaying } = props;
   return (
     <div className="Controls">
       <h4>Controls</h4>
@@ -18,7 +18,7 @@ function Controls(props) {
           <button className="Controls-hit" onClick={hit}>
             Hit
           </button>
-          <button className="Controls-stand">Stand</button>
+          <button className="Controls-stand" onClick={stand}>Stand</button>
           <button className="Controls-double">Double</button>
           <button className="Controls-split" onClick={split}>Split</button>
         </>

@@ -28,6 +28,7 @@ class Blackjack extends Component {
     this.hit = this.hit.bind(this);
     this.split = this.split.bind(this);
     this.addBet = this.addBet.bind(this);
+    this.stand = this.stand.bind(this);
   }
   componentDidMount() {
     this.addBet(50);
@@ -52,7 +53,6 @@ class Blackjack extends Component {
     // else end game/round, then check score
   }
   split() {
-    console.log("splitting hand");
     const newHand = {};
     const currentHand = this.getCurrentHand();
 
@@ -67,7 +67,7 @@ class Blackjack extends Component {
     this.calculateHandWeight(currentHand);
     this.calculateHandWeight(newHand);
 
-    this.setState({ playerHands: [currentHand, newHand] });
+    this.setState({ playerHands: [...this.state.playerHands, newHand] });
   }
   deal() {
     if (this.state.initialBet) {
@@ -95,6 +95,13 @@ class Blackjack extends Component {
   addBet(amount) {
     this.setState({ initialBet: this.state.initialBet + amount });
   }
+  stand() {
+    this.setState({ currentHand: this.state.currentHand + 1});
+
+    if (this.state.currentHand === this.state.playerHands.length - 1) {
+      this.dealerTurn();
+    }
+  }
   hit() {
     const hand = this.getCurrentHand();
 
@@ -102,10 +109,15 @@ class Blackjack extends Component {
       hand.cards.push(this.getNextCard());
 
       this.calculateHandWeight(hand);
-      this.setState({ playerHands: [hand] });
+      this.setState({ playerHands: [...this.state.playerHands] });
     }
 
     if (this.getCurrentHand().weight > 21) {
+      this.setState({ currentHand: this.state.currentHand + 1})
+      // this.dealerTurn();
+    }
+
+    if (this.state.currentHand === this.state.playerHands.length - 1) {
       this.dealerTurn();
     }
 
@@ -199,9 +211,9 @@ class Blackjack extends Component {
       dealerHands,
       bank,
       initialBet,
-      isPlaying
+      isPlaying,
+      currentHand
     } = this.state;
-    console.log(this.state);
     return (
       <div>
         <Panel
@@ -210,13 +222,14 @@ class Blackjack extends Component {
           bet={initialBet}
           isPlaying={isPlaying}
         />
-        <Player hands={playerHands} />
+        <Player hands={playerHands} currentHand={currentHand} />
         <Dealer hands={dealerHands} />
         <Controls
           hit={this.hit}
           deal={this.deal}
           isPlaying={isPlaying}
           split={this.split}
+          stand={this.stand}
         />
       </div>
     );
