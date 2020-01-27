@@ -5,3 +5,7 @@
     justify-content: center;
     margin: 0 auto;
 }
+
+.Card-image img {
+    max-width: 60px;
+}

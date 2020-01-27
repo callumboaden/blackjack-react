@@ -17,7 +17,7 @@ function Card(props) {
   return (
     <div className="Card">
       <div className="Card-image">
-        <img src={image} width="100" />
+        <img src={image} />
         <p>
         {value} of {suit}
       </p>

@@ -1,6 +1,6 @@
 .Panel {
     width: 80vw;
-    height: 20vh;
+    height: 10vh;
     display: flex;
     justify-content: space-around;
     align-items: center;
